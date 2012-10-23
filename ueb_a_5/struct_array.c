@@ -1,13 +1,85 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ARRAY_LENGTH 10
+
+
 struct employee {
   char name[41];
   int employeeNumber;
   float salary;
 };
 
+
+void deleteEmployee(struct employee **employee) {
+  free(*employee);
+  *employee = NULL;
+}
+
+void freeEmployees(struct employee  *employees[]) {
+  int i;
+  
+  for (i=0; i < ARRAY_LENGTH; i++) {
+    deleteEmployee(&(employees[i]));
+  }
+}
+
+void dumpEmployee(struct employee *employee) {
+  printf("Name: %s, Employee number: %d, Salary: %f",
+         employee->name, employee->employeeNumber, employee->salary);
+}
+
+void dumpEmployees(struct employee *employees[]) {
+  int i;
+  
+  printf("Current data:");
+  for (i=0; i < ARRAY_LENGTH; i++) {
+    printf("\n  %d: ", i);
+    if (employees[i] == NULL) {
+      printf("Free slot");
+    } else {
+      dumpEmployee(employees[i]);
+    }
+  }
+  printf("\n");
+}
+
 void clearInputBuffer(void) { while(getchar() != '\n') {} }
+
+void createEmployee(struct employee **employee) {
+  *employee = malloc(sizeof(**employee));
+  printf("Create new employee:\n");
+  printf("  Name: ");
+  scanf("%41[^\n]", (*employee)->name);
+  printf("  Employee number: ");
+  scanf("%d", &((*employee)->employeeNumber));
+  printf("  Salary: ");
+  scanf("%f", &((*employee)->salary));
+  clearInputBuffer();
+}
+
+int determineIndex(struct employee *employees[]) {
+  int index;
+  
+  do {
+    printf("Please select a valid data slot (0-%d): ", ARRAY_LENGTH-1);
+    scanf("%d", &index);
+    clearInputBuffer();
+  } while (index < 0 || index > ARRAY_LENGTH-1);
+  
+  return index;
+}
+
+void updateEmployees(struct employee *employees[]) {
+  int index = determineIndex(employees);
+  
+  if (employees[index] == NULL) {
+    createEmployee(&(employees[index]));
+  } else {
+    deleteEmployee(&(employees[index]));
+    printf("Deleted entry %d.", index);
+  }
+}
 
 int determineAction(void) {
   int action;
@@ -22,78 +94,19 @@ int determineAction(void) {
   return action;
 }
 
-int determineIndex(void) {
-  int index;
-  
-  do {
-    printf("Please select a valid data slot (0-9): ");
-    scanf("%d", &index);
-    clearInputBuffer();
-  } while (index < 0 || index > 9);
-  
-  return index;
-}
-
-void createEmployee(struct employee **employee) {
-  *employee = malloc(sizeof(**employee));
-  printf("Create new employee:\n");
-  printf("  Name: ");
-  scanf("%41[^\n]", (*employee)->name);
-  printf("  Employee number: ");
-  scanf("%d", &((*employee)->employeeNumber));
-  printf("  Salary: ");
-  scanf("%f", &((*employee)->salary));
-  clearInputBuffer();
-}
-
-void deleteEmployee(struct employee **employee) {
-  free(*employee);
-  *employee = NULL;
-}
-
-
-void updateEmployees(struct employee *employees[]) {
-  int index = determineIndex();
-  
-  if (employees[index] == NULL) {
-   createEmployee(&(employees[index]));
-  } else {
-    deleteEmployee(&(employees[index]));
-    printf("Deleted entry %d.", index);
-  }
-}
-
-void dumpEmployee(struct employee *employee) {
-  printf("Name: %s, Employee number: %d, Salary: %f",
-         employee->name, employee->employeeNumber, employee->salary);
-}
-
-void dumpEmployees(struct employee *employees[]) {
+void initializeEmployees(struct employee *employees[]) {
   int i;
   
-  printf("Current data:");
-  for (i=0; i < 10; i++) {
-    printf("\n  %d: ", i);
-    if (employees[i] == NULL) {
-      printf("Free slot");
-    } else {
-      dumpEmployee(employees[i]);
-    }
-  }
-  printf("\n");
-}
-
-void freeEmployees(struct employee  *employees[]) {
-  int i;
-  
-  for (i=0; i < 10; i++) {
-    deleteEmployee(&(employees[i]));
+  for (i=0; i < ARRAY_LENGTH; i++) {
+    employees[i] = NULL;
   }
 }
 
 int main(void) {
-  struct employee *employees[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+  struct employee *employees[ARRAY_LENGTH];
   int action;
+  
+  initializeEmployees(employees);
   
   do {
     action = determineAction();
