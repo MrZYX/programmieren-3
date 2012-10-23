@@ -6,14 +6,12 @@ int main(void) {
   int *ap, *bp;
   int i;
   
-  ap = &a[0];
-  bp = &b[0];
+  ap = a;
+  bp = b;
   
   for (i=0; i<5; i++) {
     *(bp+(4-i)) = *(ap+i);
   }
-  
-  bp = &b[0];
   
   for (i=0; i<5; i++) {
     printf("%d ", *(bp+i));
