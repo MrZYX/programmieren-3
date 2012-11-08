@@ -23,6 +23,6 @@ int main(void) {
   system(buf);
   
   free(buf);
-  
+
   return 0;
 }
