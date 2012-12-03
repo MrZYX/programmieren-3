@@ -25,7 +25,7 @@ void binary_load_and_print(void) {
   fread(&n, sizeof(n), 1, file);
 
   employees = malloc(n*sizeof(*employees));
-  fread(employees, sizeof(*employees), n, file);
+  fread(employees, sizeof(*xemployees), n, file);
 
   fclose(file);
   
