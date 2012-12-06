@@ -4,6 +4,7 @@ int* createArray(int n) {
 
 void releaseArray(int*& arr) {
   delete[] arr;
+  arr = NULL;
 }
 
 int main(void) {

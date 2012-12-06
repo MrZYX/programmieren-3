@@ -3,21 +3,23 @@
 
 #include <string>
 
+#define CART_ITEM_WIDTH 52
+
 using namespace std;
 
 class CartItem {
   private:
     unsigned int itemId;
-    char* name;
+    string name;
     double pricePerUnit;
     unsigned int quantity;
     static unsigned int lastItemId;
   public:
-    CartItem(const char* name, double pricePerUnit, unsigned int quantity);
+    CartItem(const string name, double pricePerUnit, unsigned int quantity);
     CartItem(const CartItem& item);
     unsigned int getItemId() const;
-    char* getName() const;
-    void setName(const char* name);
+    string getName() const;
+    void setName(string name);
     double getPricePerUnit() const;
     void setPricePerUnit(double pricePerUnit);
     unsigned int getQuantity() const;

@@ -1,24 +1,21 @@
-#include <cstring>
-#include <cstdlib>
 #include <sstream>
 #include <iomanip>
+#include <locale>
 #include "CartItem.h"
 
 using namespace std;
 
 unsigned int CartItem::lastItemId = 0;
 
-CartItem::CartItem(const char* name, double pricePerUnit, unsigned int quantity) {
+CartItem::CartItem(string name, double pricePerUnit, unsigned int quantity) {
   this->itemId = ++lastItemId;
-  this->name = NULL;
   setName(name);
   setPricePerUnit(pricePerUnit);
   setQuantity(quantity);
 }
 
 CartItem::CartItem(const CartItem& item) {
-  this->itemId = item.itemId;
-  this->name = NULL;
+  this->itemId = item.getItemId();
   setName(item.getName());
   setPricePerUnit(item.getPricePerUnit());
   setQuantity(item.getQuantity());
@@ -28,17 +25,12 @@ unsigned int CartItem::getItemId() const {
   return this->itemId;
 }
 
-char* CartItem::getName() const {
+string CartItem::getName() const {
   return this->name;
 }
 
-void CartItem::setName(const char* name) {
-  if (this->name != NULL) {
-    free(this->name);
-  }
-  
-  this->name = (char*) malloc((strlen(name)+1)*sizeof(*name));
-  strcpy(this->name, name);
+void CartItem::setName(string name) {
+  this->name = name;
 }
 
 double CartItem::getPricePerUnit() const {
@@ -62,13 +54,14 @@ double CartItem::getCost() const {
   return this->quantity*this->pricePerUnit;
 }
 
-std::string CartItem::toString() const {
+string CartItem::toString() const {
   ostringstream os;
-
-  os << fixed << setprecision(2);// << setw(40);
+  //os.imbue(locale(""));
+  os << fixed << setprecision(2);
+  //os << os.getloc().name();
   os << setw(3)  << right << this->quantity;
   os << setw(3)  << left  << " x ";
-  os << setw(30) << left  << this->name; //FIXME: alignment is wrong, non-ascii chars count as 2+
+  os << setw(CART_ITEM_WIDTH-22) << left  << this->name; //FIXME: alignment is wrong, non-ascii chars count as 2+
   os << setw(8)  << right << this->pricePerUnit;
   os << setw(8)  << right << this->getCost();
   os << endl;
@@ -76,9 +69,4 @@ std::string CartItem::toString() const {
 }
 
 
-CartItem::~CartItem() {
-  if(this->name != NULL) {
-    free((void*) this->name);
-    this->name = NULL;
-  }
-}
+CartItem::~CartItem() {}

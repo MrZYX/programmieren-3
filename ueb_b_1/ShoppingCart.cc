@@ -52,8 +52,9 @@ string ShoppingCart::toString() const {
   for (unsigned int i = 0; i < items.size(); i++) {
     os << items[i].toString();
   }
-  os << setw(12) << left << "Summe:";
-  os << setw(40) << right << this->getTotalCost() << endl;
+  os << endl;
+  os << setw(12) << left << "Total:";
+  os << setw(CART_ITEM_WIDTH-12) << right << this->getTotalCost() << endl;
   return os.str();
 }
 

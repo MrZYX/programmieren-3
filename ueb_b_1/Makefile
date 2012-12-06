@@ -1,4 +1,4 @@
-CPPARGS = -pedantic-errors -Wall -ansi -g
+CPPARGS = -pedantic-errors -Wall --ansi -g
 
 buyStuff: buyStuff.o ShoppingCart.o CartItem.o
 	g++ $(CPPARGS) -o $@ $^
